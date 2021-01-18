@@ -33,8 +33,7 @@ public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConn
 	
 	@Override
 	protected ConnectionProvider getAnyConnectionProvider() {
-		return Optional.ofNullable(getConnectionProvider(TenantContext.DEFAULT_TENANT_ID))
-				.orElse(null);
+		return getConnectionProvider(TenantContext.DEFAULT_TENANT_ID);
 	}
 
 	@Override
@@ -65,10 +64,10 @@ public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConn
 				.orElse(null);
 	}
 	
-	public Properties getHibernatePropertiesForTenantId(String tenantId) {
+	private Properties getHibernatePropertiesForTenantId(String tenantId) {
         try {
         	Properties properties = new Properties();
-			properties.load(getClass().getResourceAsStream(HIBERNATE_PROPERTIES_PATH));
+			properties.load(getClass().getResourceAsStream(String.format(HIBERNATE_PROPERTIES_PATH, tenantId)));
 			return properties;
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot open hibernate properties: "+ HIBERNATE_PROPERTIES_PATH);
