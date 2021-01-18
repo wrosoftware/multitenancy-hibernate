@@ -1,8 +1,6 @@
 package com.deviniti.multitenancy.separate.schema.configuration.hibernate.multitenancy;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -17,18 +15,11 @@ import com.deviniti.multitenancy.separate.schema.configuration.multitenancy.cont
 @SuppressWarnings("serial")
 public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider {
 	
-	private static final String HIBERNATE_PROPERTIES_PATH = "/application.properties";
+	public static final String HIBERNATE_PROPERTIES_PATH = "/hibernate-%s.properties";
 	private final Map<String, ConnectionProvider> connectionProviderMap;
 
 	public SchemaMultiTenantConnectionProvider() {
 		this.connectionProviderMap = new HashMap<String, ConnectionProvider>();
-	}
-	
-	@Override
-	public Connection getConnection(String tenantIdentifier) throws SQLException {
-		Connection connection = super.getConnection(tenantIdentifier);
-		connection.createStatement().execute(String.format("SET SCHEMA '%s';", tenantIdentifier));
-		return connection;
 	}
 	
 	@Override

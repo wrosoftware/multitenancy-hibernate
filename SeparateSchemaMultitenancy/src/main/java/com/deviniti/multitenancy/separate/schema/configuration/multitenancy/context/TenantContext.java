@@ -2,7 +2,7 @@ package com.deviniti.multitenancy.separate.schema.configuration.multitenancy.con
 
 public abstract class TenantContext {
 
-	public static final String DEFAULT_TENANT_ID = "public";
+	public static final String DEFAULT_TENANT_ID = "multitenancy_default";
 	private static ThreadLocal<String> currentTenant = new ThreadLocal<String>();
 
     public static void setCurrentTenant(String tenant) {
