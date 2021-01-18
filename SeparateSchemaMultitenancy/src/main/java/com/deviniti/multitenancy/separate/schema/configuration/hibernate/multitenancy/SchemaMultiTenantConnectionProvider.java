@@ -1,5 +1,6 @@
 package com.deviniti.multitenancy.separate.schema.configuration.hibernate.multitenancy;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import com.deviniti.multitenancy.separate.schema.configuration.multitenancy.cont
 @SuppressWarnings("serial")
 public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider {
 	
+	private static final String HIBERNATE_PROPERTIES_PATH = "/application.properties";
 	private final Map<String, ConnectionProvider> connectionProviderMap;
 
 	public SchemaMultiTenantConnectionProvider() {
@@ -49,15 +51,28 @@ public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConn
 	private ConnectionProvider createNewConnectionProvider(String tenantIdentifier) {
 		return Optional.ofNullable(tenantIdentifier)
 				.map(this::createConnectionProvider)
-				.map(connectionProvider -> connectionProviderMap.put(tenantIdentifier, connectionProvider))
+				.map(connectionProvider -> {
+					connectionProviderMap.put(tenantIdentifier, connectionProvider);
+					return connectionProvider;
+				})
 				.orElseThrow(() -> new ConnectionProviderException("Cannot create new connection provider for tenant: "+tenantIdentifier));
 	}
 	
 	private ConnectionProvider createConnectionProvider(String tenantIdentifier) {
-		return Optional.ofNullable(TenantHelper.getInstance())
-				.map(helper -> helper.getHibernatePropertiesForTenantId(tenantIdentifier))
-				.map(hibernateProperties -> initConnectionProvider(hibernateProperties))
+		return Optional.ofNullable(tenantIdentifier)
+				.map(this::getHibernatePropertiesForTenantId)
+				.map(this::initConnectionProvider)
 				.orElse(null);
+	}
+	
+	public Properties getHibernatePropertiesForTenantId(String tenantId) {
+        try {
+        	Properties properties = new Properties();
+			properties.load(getClass().getResourceAsStream(HIBERNATE_PROPERTIES_PATH));
+			return properties;
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot open hibernate properties: "+ HIBERNATE_PROPERTIES_PATH);
+		}
 	}
 
 	private ConnectionProvider initConnectionProvider(Properties hibernateProperties) {

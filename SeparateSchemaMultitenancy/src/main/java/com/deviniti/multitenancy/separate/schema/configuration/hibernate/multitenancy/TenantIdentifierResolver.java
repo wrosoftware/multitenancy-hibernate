@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.deviniti.multitenancy.separate.schema.configuration.multitenancy.context.TenantContext;
 
-@Component
-@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+//@Component
+//@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver {
 	
 	@Override

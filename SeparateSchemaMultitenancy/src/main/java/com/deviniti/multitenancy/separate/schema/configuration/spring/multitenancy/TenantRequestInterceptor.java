@@ -11,8 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.deviniti.multitenancy.separate.schema.configuration.multitenancy.context.TenantContext;
 import com.deviniti.multitenancy.separate.schema.security.domain.SecurityDomain;
-import com.deviniti.multitenancy.separate.schema.tenant.domain.TenantDomain;
-import com.deviniti.multitenancy.separate.schema.tenant.model.TenantDto;
 
 @Component
 public class TenantRequestInterceptor implements AsyncHandlerInterceptor{
@@ -37,7 +35,6 @@ public class TenantRequestInterceptor implements AsyncHandlerInterceptor{
 	    }
 	    
 	    private boolean setTenantContext(String tenant) {
-	    	System.out.println(tenant);
 	    	TenantContext.setCurrentTenant(tenant);
 	    	return true;
 	    }

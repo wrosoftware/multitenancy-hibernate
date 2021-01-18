@@ -116,9 +116,6 @@ ALTER TABLE sale_product
     OWNER to postgres;
     
     
-CREATE SCHEMA tenant
-    AUTHORIZATION postgres;
-    
 CREATE TABLE tenant
 (
     tenant_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
