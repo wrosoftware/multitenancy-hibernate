@@ -1,4 +1,7 @@
-CREATE TABLE address
+CREATE SCHEMA tenant2
+    AUTHORIZATION postgres;
+
+CREATE TABLE tenant2.address
 (
     id bigint NOT NULL,
     city character varying(255) COLLATE pg_catalog."default",
@@ -14,10 +17,10 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE address
+ALTER TABLE tenant2.address
     OWNER to postgres;
     
-CREATE TABLE customer
+CREATE TABLE tenant2.customer
 (
     id bigint NOT NULL,
     login character varying(255) COLLATE pg_catalog."default",
@@ -27,7 +30,7 @@ CREATE TABLE customer
     address_id bigint,
     CONSTRAINT customer_pkey PRIMARY KEY (id),
     CONSTRAINT fkglkhkmh2vyn790ijs6hiqqpi FOREIGN KEY (address_id)
-        REFERENCES address (id) MATCH SIMPLE
+        REFERENCES tenant2.address (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -36,10 +39,10 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE customer
+ALTER TABLE tenant2.customer
     OWNER to postgres;
 
-CREATE TABLE warehouse
+CREATE TABLE tenant2.warehouse
 (
     id bigint NOT NULL,
     amount numeric(19,2),
@@ -50,12 +53,12 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE warehouse
+ALTER TABLE tenant2.warehouse
     OWNER to postgres;
     
 
     
-CREATE TABLE product
+CREATE TABLE tenant2.product
 (
     id bigint NOT NULL,
     description character varying(255) COLLATE pg_catalog."default",
@@ -64,7 +67,7 @@ CREATE TABLE product
     warehouse_id bigint,
     CONSTRAINT product_pkey PRIMARY KEY (id),
     CONSTRAINT fkk6edvfdkq61mjhltx856ncs3x FOREIGN KEY (warehouse_id)
-        REFERENCES warehouse (id) MATCH SIMPLE
+        REFERENCES tenant2.warehouse (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -73,16 +76,16 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE product
+ALTER TABLE tenant2.product
     OWNER to postgres;
     
-CREATE TABLE sale
+CREATE TABLE tenant2.sale
 (
     id bigint NOT NULL,
     customer_id bigint,
     CONSTRAINT sale_pkey PRIMARY KEY (id),
     CONSTRAINT fkjw88ojfoqquyd9f1obip1ar0g FOREIGN KEY (customer_id)
-        REFERENCES customer (id) MATCH SIMPLE
+        REFERENCES tenant2.customer (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -91,19 +94,19 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE sale
+ALTER TABLE tenant2.sale
     OWNER to postgres;
     
-CREATE TABLE sale_product
+CREATE TABLE tenant2.sale_product
 (
     sale_id bigint NOT NULL,
     product_id bigint NOT NULL,
     CONSTRAINT fk4dtibi1vwxkx8gjs59nhp0cnq FOREIGN KEY (sale_id)
-        REFERENCES sale (id) MATCH SIMPLE
+        REFERENCES tenant2.sale (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     CONSTRAINT fkrtwiisrmdqeslt86pacdwwn1o FOREIGN KEY (product_id)
-        REFERENCES product (id) MATCH SIMPLE
+        REFERENCES tenant2.product (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -112,23 +115,6 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE sale_product
+ALTER TABLE tenant2.sale_product
     OWNER to postgres;
-    
-    
-CREATE SCHEMA tenant
-    AUTHORIZATION postgres;
-    
-CREATE TABLE tenant
-(
-    tenant_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    schema_name character varying(255) COLLATE pg_catalog."default",
-    CONSTRAINT tenant_pkey PRIMARY KEY (tenant_id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE tenant
-    OWNER to postgres;
+ 

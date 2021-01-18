@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
+@Table(schema="public")
 @Data
 public class Tenant {
 

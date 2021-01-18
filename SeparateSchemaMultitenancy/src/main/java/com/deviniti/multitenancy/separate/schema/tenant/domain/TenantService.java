@@ -17,8 +17,9 @@ public class TenantService {
 	}
 	
 	public TenantDto findByTenantId(String tenantId) {
-		return tenantRepository.findById(tenantId)
-				.map(TenantMapper::mapToDto)
-				.orElse(null);
+		return TenantDto.builder()
+				.tenantId(tenantId)
+				.databaseSchemaName(tenantId)
+				.build();
 	}
 }

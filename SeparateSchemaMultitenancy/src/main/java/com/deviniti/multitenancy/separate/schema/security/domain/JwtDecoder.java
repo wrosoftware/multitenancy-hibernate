@@ -12,15 +12,15 @@ import com.nimbusds.jwt.SignedJWT;
 
 public class JwtDecoder {
 	private static final String AUTHORIZATION = "Authorization";
-	private static final String BEARER = "Bearer";
+	private static final String JWT_TOKEN_LABEL = "token";
 	
 	private final String jwtToken;
 	
 	public JwtDecoder(HttpServletRequest request) {
 			this.jwtToken = Optional.ofNullable(request)
 					.map(req -> req.getHeader(AUTHORIZATION))
-					.filter(headerWithToken -> headerWithToken.startsWith(BEARER))
-	    			.map(headerWithToken -> headerWithToken.substring(BEARER.length()))
+					.filter(headerWithToken -> headerWithToken.contains(JWT_TOKEN_LABEL))
+	    			.map(headerWithToken -> headerWithToken.substring(headerWithToken.indexOf(JWT_TOKEN_LABEL)+JWT_TOKEN_LABEL.length()+1))
 	    			.map(token -> token.trim())
 	                .orElseThrow(() -> {
 	                    return new CredentialsException("Missing Authentication Token");

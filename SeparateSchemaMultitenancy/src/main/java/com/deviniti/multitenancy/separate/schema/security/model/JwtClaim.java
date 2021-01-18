@@ -2,7 +2,7 @@ package com.deviniti.multitenancy.separate.schema.security.model;
 
 public enum JwtClaim {
 
-	TOKEN_ID("token-id");
+	TOKEN_ID("tenant-id");
 	
 	private String value;
 	
