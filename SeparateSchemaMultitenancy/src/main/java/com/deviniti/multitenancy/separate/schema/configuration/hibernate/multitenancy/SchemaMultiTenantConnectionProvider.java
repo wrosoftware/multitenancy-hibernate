@@ -67,7 +67,7 @@ public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConn
 	private Properties getHibernatePropertiesForTenantId(String tenantId) {
         try {
         	Properties properties = new Properties();
-			properties.load(getClass().getResourceAsStream(String.format(HIBERNATE_PROPERTIES_PATH, tenantId)));
+			properties.load(getClass().getResourceAsStream(HIBERNATE_PROPERTIES_PATH));
 			return properties;
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot open hibernate properties: "+ HIBERNATE_PROPERTIES_PATH);
